@@ -19,8 +19,8 @@
 
 ### Creación de Torres
 - [ ] No permitir sobreposición entre torres
-- [ ] Generar áreas de movimiento y ataque, estas sí se pueden sobreponer
-- Las torrestas son torpes solo siguen instrucciones.
+- [ ] Generar áreas de movimiento y ataque, estas sí se pueden sobreponer  
+Las torrestas son torpes solo siguen instrucciones.
 
 ## Link para escribir chido en este doc
 [Referecia de Escritura](https://guides.github.com/features/mastering-markdown/)
