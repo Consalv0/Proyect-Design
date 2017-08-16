@@ -26,7 +26,7 @@
 
 ### Creación de Torres
 - [ ] No permitir sobreposición entre torres **R** **M**
-- [ ] Generar áreas de movimiento y ataque, estas sí se pueden sobreponer  **C** **M**
+- [ ] Generar áreas de movimiento y ataque, estas sí se pueden sobreponer  **C** **M**  
 Las torrestas son torpes solo siguen instrucciones.
 
 ## Diseño
