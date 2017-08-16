@@ -16,16 +16,16 @@
 - [ ] Acercamiento / Alejamientos
 
 ## Jugabilidad
-- [ ] Ataques **M**, **C**
-- [ ] Defenza **M**, **C**  
+- [ ] Ataques **R**, **C**
+- [ ] Defenza **R**, **C**  
 - [ ] Buffs (Temporal, Permanente)
 
-## Interfaz
+## Interfaz **M**
 - [ ] Objetos
-- [ ] GUI **M**
+- [ ] GUI **R**
 
 ### Creación de Torres **M**
-- [ ] No permitir sobreposición entre torres **M**
+- [ ] No permitir sobreposición entre torres **R**
 - [ ] Generar áreas de movimiento y ataque, estas sí se pueden sobreponer  **C**
 Las torrestas son torpes solo siguen instrucciones.
 
