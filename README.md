@@ -1,32 +1,32 @@
 # Proyect-Design
 ## Progra
-### Camara **G**
-- [ ] Cámara isométrica movible (no rotatoria)
-- [ ] *Zoom*
+### Camara
+- [ ] Cámara isométrica movible (no rotatoria) **G**
+- [ ] *Zoom* **G**
 
 ### Spawn
 - [ ] Prototipo de Spawn
 - [ ] Aumentos de nivel (aceleración)
 - [ ] Distintos tipos de minions **G**
 
-### Jugabilidad con Torres **M**
-- [ ] Maná / Energía
+### Jugabilidad con Torres
+- [ ] Maná / Energía **M**
 - [ ] Movimiento **C**
-- [ ] Rotaciones
-- [ ] Acercamiento / Alejamientos
+- [ ] Rotaciones **M**
+- [ ] Acercamiento / Alejamientos **M**
 
 ## Jugabilidad
 - [ ] Ataques **R**, **C**
 - [ ] Defenza **R**, **C**  
 - [ ] Buffs (Temporal, Permanente)
 
-## Interfaz **M**
-- [ ] Objetos
+## Interfaz
+- [ ] Objetos **M**
 - [ ] GUI **R**
 
-### Creación de Torres **M**
-- [ ] No permitir sobreposición entre torres **R**
-- [ ] Generar áreas de movimiento y ataque, estas sí se pueden sobreponer  **C**
+### Creación de Torres
+- [ ] No permitir sobreposición entre torres **R** **M**
+- [ ] Generar áreas de movimiento y ataque, estas sí se pueden sobreponer  **C** **M**
 Las torrestas son torpes solo siguen instrucciones.
 
 ## Diseño
