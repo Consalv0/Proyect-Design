@@ -12,15 +12,15 @@ public class PoolManager : Behaviour {
 	/// </summary>
 	/// <returns>The pool holder.</returns>
 	/// <param name="prefab">Prefab.</param>
-	public static PoolHolder GetPoolHolder(GameObject prefab) {
-		return GetPoolHolder(prefab.GetInstanceID());
+	public static PoolHolder FindPoolHolder(GameObject prefab) {
+		return FindPoolHolder(prefab.GetInstanceID());
 	}
 	/// <summary>
 	/// Gets the pool holder of the given prefab ID.
 	/// </summary>
 	/// <returns>The pool holder.</returns>
 	/// <param name="prefabID">Prefab identifier.</param>
-	public static PoolHolder GetPoolHolder(int prefabID) {
+	public static PoolHolder FindPoolHolder(int prefabID) {
 		if (poolHolders.Count == 0) {
 			Debug.LogWarning("No 'PoolHolder' instances. Try creating one first.");
 			return null;
@@ -31,19 +31,28 @@ public class PoolManager : Behaviour {
 		}
 	}
 
+	public static bool AddPoolHolder(PoolHolder poolHolder, int poolID) {
+		if (poolHolders.ContainsKey(poolID)) {
+			Debug.Log("Pool already exists");
+			return false;
+		} else {
+			poolHolders.Add(poolID, poolHolder);
+			return true;
+		}
+	}
 	/// <summary>
 	/// Adds a PoolHolder to a given GameObject.
 	/// </summary>
-	/// <returns>The pool holder.</returns>
+	/// <returns>The added pool holder.</returns>
 	/// <param name="prefab">Prefab.</param>
 	/// <param name="parent">Parent.</param>
 	public static PoolHolder AddPoolHolder(GameObject prefab, GameObject parent) {
 		return AddPoolHolder(prefab, parent, 0);
 	}
-	/// <summary>
+	/// <summary> 
 	/// Adds a PoolHolder to a given GameObject with a start size.
 	/// </summary>
-	/// <returns>The pool holder.</returns>
+	/// <returns>The added pool holder.</returns>
 	/// <param name="prefab">Prefab.</param>
 	/// <param name="parent">Parent.</param>
 	/// <param name="poolSize">Pool size.</param>
@@ -67,8 +76,8 @@ public class PoolManager : Behaviour {
 	/// </summary>
 	/// <returns>The pool holder.</returns>
 	/// <param name="prefab">Prefab.</param>
-	public static PoolHolder CreatePoolHolder(GameObject prefab, bool parenting) {
-		return CreatePoolHolder(prefab, 0, parenting);
+	public static PoolHolder CreatePoolHolder(GameObject prefab) {
+		return CreatePoolHolder(prefab, -1);
 	}
 	/// <summary>
 	/// Creates a pool holder with a start size.
@@ -76,7 +85,7 @@ public class PoolManager : Behaviour {
 	/// <returns>The pool holder.</returns>
 	/// <param name="prefab">Prefab.</param>
 	/// <param name="poolSize">Pool size.</param>
-	public static PoolHolder CreatePoolHolder(GameObject prefab, int poolSize, bool parenting) {
+	public static PoolHolder CreatePoolHolder(GameObject prefab, int startSize) {
 		int prefabID = prefab.GetInstanceID();
 
 		if (poolHolders.ContainsKey(prefabID)) {
@@ -87,14 +96,14 @@ public class PoolManager : Behaviour {
 			newPool.transform.parent = poolManager.transform;
 			PoolHolder newPoolHolder = newPool.AddComponent<PoolHolder>();
 			newPoolHolder.SetPoolPrefab(prefab);
-			if (parenting) {
-				newPoolHolder.Add(poolSize, newPool.transform);
-			} else {
-				newPoolHolder.Add(poolSize);
-			}
+			if (startSize > 0) newPoolHolder.Add(startSize);
 			poolHolders.Add(prefabID, newPoolHolder);
 
 			return newPoolHolder;
 		}
+	}
+
+	public static void RemovePoolHolder(int poolID) {
+		poolHolders.Remove(poolID);
 	}
 }
