@@ -22,7 +22,7 @@ public class PoolManager : Behaviour {
 	/// <param name="prefabID">Prefab identifier.</param>
 	public static PoolHolder FindPoolHolder(int prefabID) {
 		if (poolHolders.Count == 0) {
-			Debug.LogWarning("No 'PoolHolder' instances. Try creating one first.");
+			Debug.LogWarning("PoolManager: No 'PoolHolder' instances. Try creating one first.");
 			return null;
 		} else {
 			PoolHolder ph;
@@ -31,13 +31,13 @@ public class PoolManager : Behaviour {
 		}
 	}
 
-	public static bool AddPoolHolder(PoolHolder poolHolder, int poolID) {
-		if (poolHolders.ContainsKey(poolID)) {
-			Debug.Log("Pool already exists");
-			return false;
+	public static PoolHolder AddExistingPoolHolder(PoolHolder poolHolder) {
+		if (poolHolders.ContainsKey(poolHolder.prefabID)) {
+			Debug.LogWarning("The pool of '" + poolHolder.prefab.name + "' already exist", poolHolder);
+			return poolHolders[poolHolder.prefabID];
 		} else {
-			poolHolders.Add(poolID, poolHolder);
-			return true;
+			poolHolders.Add(poolHolder.prefabID, poolHolder);
+			return poolHolder;
 		}
 	}
 	/// <summary>
@@ -59,7 +59,7 @@ public class PoolManager : Behaviour {
 	public static PoolHolder AddPoolHolder(GameObject prefab, GameObject parent, int poolSize) {
 		int prefabID = prefab.GetInstanceID();
 		if (poolHolders.ContainsKey(prefabID)) {
-			Debug.Log("Pool already exists");
+			Debug.LogWarning("The pool of '" + prefab.name + "' already exist", poolHolders[prefabID]);
 			return poolHolders[prefabID];
 		} else {
 			PoolHolder newPoolHolder = parent.AddComponent<PoolHolder>();
@@ -89,7 +89,7 @@ public class PoolManager : Behaviour {
 		int prefabID = prefab.GetInstanceID();
 
 		if (poolHolders.ContainsKey(prefabID)) {
-			Debug.Log("Pool already exists");
+			Debug.Log("Pool already exists", poolHolders[prefabID]);
 			return poolHolders[prefabID];
 		} else {
 			GameObject newPool = new GameObject(prefab.name + "Pool");

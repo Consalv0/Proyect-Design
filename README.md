@@ -16,6 +16,7 @@
 - [ ] Acercamiento / Alejamientos **M**
 
 ## Jugabilidad
+- [ ] Zombie Smash
 - [ ] Ataques **R**, **C**
 - [ ] Defenza **R**, **C**  
 - [ ] Buffs (Temporal, Permanente)

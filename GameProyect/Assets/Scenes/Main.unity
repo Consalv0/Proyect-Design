@@ -124,7 +124,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &652777717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,7 +148,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &652777719
 MonoBehaviour:
@@ -161,10 +161,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c9ecc096538fa4489f01ff9b79a4d04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parenting: 1
-  growRate: 10
   poolPrefab: {fileID: 1701524841350758, guid: 6a4d634b7c52b7f44b3e1c0968e3246f, type: 2}
   poolID: 0
+  parenting: 1
+  stateSwicher: 1
+  growRate: 10
+  awakeSize: 1000
 --- !u!1 &855249503
 GameObject:
   m_ObjectHideFlags: 0
@@ -274,6 +276,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 1701524841350758, guid: 338561c3b67564f70a8eea0b19d5094b, type: 2}
   dir: {x: 0, y: 10, z: -5}
+  spawnTime: 0.1
 --- !u!4 &1281222821
 Transform:
   m_ObjectHideFlags: 0
@@ -285,7 +288,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1281222822
 MonoBehaviour:
@@ -298,10 +301,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c9ecc096538fa4489f01ff9b79a4d04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parenting: 1
-  growRate: 10
   poolPrefab: {fileID: 1701524841350758, guid: 338561c3b67564f70a8eea0b19d5094b, type: 2}
   poolID: 0
+  parenting: 0
+  stateSwicher: 0
+  growRate: 10
+  awakeSize: 100
 --- !u!1 &1291462713
 GameObject:
   m_ObjectHideFlags: 0

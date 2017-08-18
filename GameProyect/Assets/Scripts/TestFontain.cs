@@ -5,9 +5,9 @@ using UnityEngine;
 public class TestFontain : MonoBehaviour {
 	public GameObject prefab;
 	public Vector3 dir;
+	public float spawnTime;
 
 	void Start() {
-		PoolManager.FindPoolHolder(prefab).Add(100);
 		StartCoroutine(Fontain());
 	}
 
@@ -30,7 +30,7 @@ public class TestFontain : MonoBehaviour {
 				prefabRB.velocity = Vector3.zero;
 				prefabRB.AddForce(dir, ForceMode.Impulse);
 			}
-			yield return new WaitForSeconds(0.5f);
+			yield return new WaitForSeconds(spawnTime + 0.00001f);
 		}
 	}
 }

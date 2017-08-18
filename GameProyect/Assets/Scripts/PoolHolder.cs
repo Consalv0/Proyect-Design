@@ -3,21 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PoolHolder : MonoBehaviour {
-	public bool parenting = true;
-	public int growRate = 10;
 	[SerializeField] GameObject poolPrefab;
+	public GameObject prefab {
+		get {
+			return poolPrefab;
+		}
+	}
 	[ReadOnly][SerializeField] int poolID;
-	 
+	public int prefabID {
+		get {
+			return poolID;
+		}
+	}
+	public bool parenting = true;
+	public bool stateSwicher = true;
+	public int growRate = 10;
+	public int awakeSize = 0;
+
 	[SerializeField] Queue<GameObject> objectsInPool;
 
-	void Start() {
+	void Awake() {
 		if (poolPrefab == null) {
 			throw new System.NullReferenceException("Pool prefab is missing or null");
 		} else {
 			poolID = poolPrefab.GetInstanceID();
 			objectsInPool = new Queue<GameObject>();
-			if (PoolManager.AddPoolHolder(this, poolID) == false) {
-				Destroy(this);
+			if (PoolManager.AddExistingPoolHolder(this).GetInstanceID() == GetInstanceID()) {
+				Add(awakeSize);
+			} else {
+				poolPrefab = null;
+				poolID = 0;
 			}
 		}
 	}
@@ -39,27 +54,32 @@ public class PoolHolder : MonoBehaviour {
 		for (int i = 0; i < value; i++) {
 			GameObject poolObject = Instantiate(poolPrefab);
 			poolObject.name = poolObject.GetInstanceID() + "@" + name;
-			poolObject.AddComponent<PoolObject>().SetPoolHolder(this);
+			if (poolObject.GetComponent<PoolObject>() == null) {
+				poolObject.AddComponent<PoolObject>().SetPoolHolder(this);
+			} else {
+				poolObject.GetComponent<PoolObject>().SetPoolHolder(this);
+			}
 			if (parenting && this.parenting) { 
 				poolObject.transform.parent = parenting;
 			}
-
-			poolObject.SetActive(false);
+			if (stateSwicher) poolObject.SetActive(false);
 			objectsInPool.Enqueue(poolObject);
 		}
 	}
 
 	public void Recycle(GameObject gameObject) {
-		gameObject.SetActive(false);
+		if (stateSwicher) gameObject.SetActive(false);
+		gameObject.SendMessage("OnRecycle", SendMessageOptions.DontRequireReceiver);
 		objectsInPool.Enqueue(gameObject);
 	}
-	
+
 	public GameObject PickObject() {
 		GameObject pickedObject = TakeObject();
 		if (!pickedObject) throw new System.Exception("PoolHolder is empty try adding objects first!");
-		pickedObject.SetActive(false);
+		if (stateSwicher) pickedObject.SetActive(false);
+		pickedObject.SendMessage("OnRecycle", SendMessageOptions.DontRequireReceiver);
 		objectsInPool.Enqueue(pickedObject);
-		pickedObject.SetActive(true);
+		if (stateSwicher) pickedObject.SetActive(true);
 		return pickedObject;
 	}
 
@@ -69,17 +89,18 @@ public class PoolHolder : MonoBehaviour {
 			return ForceTakeObject();
 		} else {
 			GameObject takedObject = objectsInPool.Dequeue();
-			takedObject.SetActive(true);
+			if (stateSwicher) takedObject.SetActive(true);
 			return takedObject;
 		}
 	}
 
 	public GameObject TakeObject() {
 		if (objectsInPool.Count == 0) {
+			Debug.LogWarning("Pool is empty, try using ForceTakeObject() instead", gameObject);
 			return null;
 		} else {
 			GameObject takedObject = objectsInPool.Dequeue();
-			takedObject.SetActive(true);
+			if (stateSwicher) takedObject.SetActive(true);
 			return takedObject;
 		}
 	}
@@ -98,6 +119,8 @@ public class PoolHolder : MonoBehaviour {
 	}
 
 	void OnDestroy() {
-		PoolManager.RemovePoolHolder(poolID);
+		if (poolID != 0) {
+			PoolManager.RemovePoolHolder(poolID);
+		}
 	}
 }
