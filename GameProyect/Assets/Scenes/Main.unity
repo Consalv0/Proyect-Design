@@ -161,10 +161,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c9ecc096538fa4489f01ff9b79a4d04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolPrefab: {fileID: 1701524841350758, guid: 6a4d634b7c52b7f44b3e1c0968e3246f, type: 2}
   poolID: 0
+  poolPrefab: {fileID: 1701524841350758, guid: 6a4d634b7c52b7f44b3e1c0968e3246f, type: 2}
   parenting: 1
-  stateSwicher: 1
+  modifyState: 1
+  sendMessage: 1
   growRate: 10
   awakeSize: 1000
 --- !u!1 &855249503
@@ -276,7 +277,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 1701524841350758, guid: 338561c3b67564f70a8eea0b19d5094b, type: 2}
   dir: {x: 0, y: 10, z: -5}
-  spawnTime: 0.1
+  spawnTime: 0.0001
 --- !u!4 &1281222821
 Transform:
   m_ObjectHideFlags: 0
@@ -301,12 +302,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c9ecc096538fa4489f01ff9b79a4d04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolPrefab: {fileID: 1701524841350758, guid: 338561c3b67564f70a8eea0b19d5094b, type: 2}
   poolID: 0
-  parenting: 0
-  stateSwicher: 0
+  poolPrefab: {fileID: 1701524841350758, guid: 338561c3b67564f70a8eea0b19d5094b, type: 2}
+  parenting: 1
+  modifyState: 1
+  sendMessage: 1
   growRate: 10
-  awakeSize: 100
+  awakeSize: 10
 --- !u!1 &1291462713
 GameObject:
   m_ObjectHideFlags: 0

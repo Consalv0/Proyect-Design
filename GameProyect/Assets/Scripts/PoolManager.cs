@@ -1,10 +1,45 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
+public static class MessageForInactive {
+	/// <summary>
+	/// Determine if the object has the given method
+	/// </summary>
+	static void InvokeIfExists(this object objectToCheck, string methodName, params object[] parameters) {
+		Type type = objectToCheck.GetType();
+		MethodInfo methodInfo = type.GetMethod(methodName);
+		if (type.GetMethod(methodName) != null) {
+			methodInfo.Invoke(objectToCheck, parameters);
+		}
+	}
+	/// <summary>
+	/// Invoke the method if it exists in any component of the component's game object, even if they are inactive
+	/// </summary>
+	public static void SendMessageForInactive(this Component component, string methodName, params object[] parameters) {
+		component.gameObject.SendMessageForInactive(methodName, parameters);
+	}
+	/// <summary>
+	/// Invoke the method if it exists in any component of the game object, even if they are inactive
+	/// </summary>
+	public static void SendMessageForInactive(this GameObject gameobject, string methodName, params object[] parameters) {
+		MonoBehaviour[] components = gameobject.GetComponents<MonoBehaviour>();
+		foreach (MonoBehaviour m in components) {
+			m.InvokeIfExists(methodName, parameters);
+		}
+	}
+}
+
 public class PoolManager : Behaviour {
+	/// <summary>
+	/// The pool holders.
+	/// </summary>
 	public static Dictionary<int, PoolHolder> poolHolders = new Dictionary<int, PoolHolder>();
+	/// <summary>
+	/// The default pool holder.
+	/// </summary>
 	public static GameObject poolManager = new GameObject("PoolManager");
 
 	/// <summary>
@@ -31,6 +66,11 @@ public class PoolManager : Behaviour {
 		}
 	}
 
+	/// <summary>
+	/// Adds the existing pool holder.
+	/// </summary>
+	/// <returns>The existing pool holder.</returns>
+	/// <param name="poolHolder">Pool holder.</param>
 	public static PoolHolder AddExistingPoolHolder(PoolHolder poolHolder) {
 		if (poolHolders.ContainsKey(poolHolder.prefabID)) {
 			Debug.LogWarning("The pool of '" + poolHolder.prefab.name + "' already exist", poolHolder);
@@ -103,6 +143,10 @@ public class PoolManager : Behaviour {
 		}
 	}
 
+	/// <summary>
+	/// Removes the pool holder.
+	/// </summary>
+	/// <param name="poolID">Pool identifier.</param>
 	public static void RemovePoolHolder(int poolID) {
 		poolHolders.Remove(poolID);
 	}
