@@ -125,7 +125,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!23 &289539725
 MeshRenderer:
@@ -187,7 +187,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 289539724}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0, z: 0.5}
+  m_LocalPosition: {x: 0, y: -2.32, z: 0}
   m_LocalScale: {x: 2.3, y: 1, z: 2.3}
   m_Children: []
   m_Father: {fileID: 0}
@@ -201,11 +201,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 289539724}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e5022587a85b400986d5a909e22f39f, type: 3}
+  m_Script: {fileID: 11500000, guid: c312dc3cdc512419fb4c3b1cc708105c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderSize: 12
+  mat: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
+  renderSize: 11
   cellSize: 1
+  objectSize: 1
 --- !u!1 &855249503
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,6 +299,7 @@ GameObject:
   - component: {fileID: 1291462716}
   - component: {fileID: 1291462715}
   - component: {fileID: 1291462714}
+  - component: {fileID: 1291462719}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -367,10 +370,23 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1291462713}
-  m_LocalRotation: {x: 0.33814517, y: 0.14536633, z: -0.052952107, w: 0.9282901}
-  m_LocalPosition: {x: -2.03, y: 5.49, z: -4.55}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 18.43, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 40.03, y: 17.8, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!114 &1291462719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1291462713}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 84e0fe6f6965440d49d1a38396609e65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  components:
+  - {fileID: 289539729}
