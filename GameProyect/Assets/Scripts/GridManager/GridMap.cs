@@ -67,40 +67,29 @@ public class GridMap : MonoBehaviour, IGLDraw {
 	}
 
 	public void GLDraw() {
-
 		if (!mat) {
-			// Unity has a built-in shader that is useful for drawing
-			// simple colored things. In this case, we just want to use
-			// a blend mode that inverts destination colors.
-			var shader = Shader.Find("Hidden/Internal-Colored");
+			var shader = Shader.Find("Sprites/Default");
 			mat = new Material(shader);
-			mat.hideFlags = HideFlags.HideAndDontSave;
-			// Set blend mode to invert destination colors.
-			mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusDstColor);
-			mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-			// Turn off backface culling, depth writes, depth test.
-			mat.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
-			mat.SetInt("_ZWrite", 0);
-			mat.SetInt("_ZTest", (int)UnityEngine.Rendering.CompareFunction.Always);
 		}
 
 		GL.PushMatrix();
 		mat.SetPass(0);
 		GL.Begin(GL.LINES);
 		GL.Color(Color.cyan);
+		float gridSize = renderSize * cellSize;
+		float halfGridSize = gridSize * 0.5f;
 		for (int i = 0; i < Mathf.Abs(renderSize); i++) {
-			GL.Vertex(new Vector3(renderSize * cellSize + 0.5f, 0.5f, -i * cellSize + 0.5f) + transform.position);
-			GL.Vertex(new Vector3(-renderSize * cellSize + 0.5f, 0.5f, -i * cellSize + 0.5f) + transform.position);
-			GL.Vertex(new Vector3(renderSize * cellSize + 0.5f, 0.5f, i * cellSize + 0.5f) + transform.position);
-			GL.Vertex(new Vector3(-renderSize * cellSize + 0.5f, 0.5f, i * cellSize + 0.5f) + transform.position);
+			for (int j = 1; j < Mathf.Abs(renderSize); j++) {
+				GL.Vertex(new Vector3(-halfGridSize + (i * cellSize), 0, -halfGridSize + (j * cellSize)) + transform.position);
+				GL.Vertex(new Vector3(-halfGridSize + (i * cellSize + cellSize), 0, -halfGridSize + (j * cellSize)) + transform.position);
+			}
 		}
-
 		GL.Color(Color.red);
-		for (int i = 0; i < Mathf.Abs(renderSize); i++) {
-			GL.Vertex(new Vector3(-i * cellSize + 0.5f, 0.5f, renderSize * cellSize + 0.5f) + transform.position);
-			GL.Vertex(new Vector3(-i * cellSize + 0.5f, 0.5f, -renderSize * cellSize + 0.5f) + transform.position);
-			GL.Vertex(new Vector3(i * cellSize + 0.5f, 0.5f, renderSize * cellSize + 0.5f) + transform.position);
-			GL.Vertex(new Vector3(i * cellSize + 0.5f, 0.5f, -renderSize * cellSize + 0.5f) + transform.position);
+		for(int i = 0; i < Mathf.Abs(renderSize); i++) {
+			for (int j = 1; j < Mathf.Abs(renderSize); j++) {
+				GL.Vertex(new Vector3(-halfGridSize + (j * cellSize), 0 , -halfGridSize + (i * cellSize)) + transform.position);
+				GL.Vertex(new Vector3(-halfGridSize + (j * cellSize) ,0, -halfGridSize + (i * cellSize + cellSize)) + transform.position);
+			}
 		}
 		GL.End();
 		GL.PopMatrix();
