@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using UnityEngine;
 
@@ -32,7 +33,7 @@ public static class MessageForInactive {
 	}
 }
 
-public class PoolManager : Behaviour {
+public static class PoolManager {
 	/// <summary>
 	/// The pool holders.
 	/// </summary>
@@ -40,7 +41,8 @@ public class PoolManager : Behaviour {
 	/// <summary>
 	/// The default pool holder.
 	/// </summary>
-	public static GameObject poolManager = new GameObject("PoolManager");
+	public static GameObject poolManager = GameObject.Find("PoolManager") ?
+	                                       GameObject.Find("PoolManager") : new GameObject("PoolManager");
 
 	/// <summary>
 	/// Gets the pool holder of the given prefab.
@@ -57,7 +59,7 @@ public class PoolManager : Behaviour {
 	/// <param name="prefabID">Prefab identifier.</param>
 	public static PoolHolder FindPoolHolder(int prefabID) {
 		if (poolHolders.Count == 0) {
-			Debug.LogWarning("PoolManager: No 'PoolHolder' instances. Try creating one first.");
+			UnityEngine.Debug.LogWarning("PoolManager: No 'PoolHolder' instances. Try creating one first.");
 			return null;
 		} else {
 			PoolHolder ph;
@@ -73,7 +75,7 @@ public class PoolManager : Behaviour {
 	/// <param name="poolHolder">Pool holder.</param>
 	public static PoolHolder AddExistingPoolHolder(PoolHolder poolHolder) {
 		if (poolHolders.ContainsKey(poolHolder.prefabID)) {
-			Debug.LogWarning("The pool of '" + poolHolder.prefab.name + "' already exist", poolHolder);
+			UnityEngine.Debug.LogWarning("The pool of '" + poolHolder.prefab.name + "' already exist", poolHolder);
 			return poolHolders[poolHolder.prefabID];
 		} else {
 			poolHolders.Add(poolHolder.prefabID, poolHolder);
@@ -99,7 +101,7 @@ public class PoolManager : Behaviour {
 	public static PoolHolder AddPoolHolder(GameObject prefab, GameObject parent, int poolSize) {
 		int prefabID = prefab.GetInstanceID();
 		if (poolHolders.ContainsKey(prefabID)) {
-			Debug.LogWarning("The pool of '" + prefab.name + "' already exist", poolHolders[prefabID]);
+			UnityEngine.Debug.LogWarning("The pool of '" + prefab.name + "' already exist", poolHolders[prefabID]);
 			return poolHolders[prefabID];
 		} else {
 			PoolHolder newPoolHolder = parent.AddComponent<PoolHolder>();
@@ -124,20 +126,23 @@ public class PoolManager : Behaviour {
 	/// </summary>
 	/// <returns>The pool holder.</returns>
 	/// <param name="prefab">Prefab.</param>
-	/// <param name="poolSize">Pool size.</param>
+	/// <param name="startSize">Pool initial size.</param>
 	public static PoolHolder CreatePoolHolder(GameObject prefab, int startSize) {
 		int prefabID = prefab.GetInstanceID();
 
+		if (new StackFrame(1, true).GetMethod().Name == "Awake") {
+			UnityEngine.Debug.LogWarning("Making a PoolHolder in 'Awake()' may result in errors try using 'Start() instead'", prefab);
+		}
+
 		if (poolHolders.ContainsKey(prefabID)) {
-			Debug.Log("Pool already exists", poolHolders[prefabID]);
+			UnityEngine.Debug.Log("Pool already exists", poolHolders[prefabID]);
 			return poolHolders[prefabID];
 		} else {
 			GameObject newPool = new GameObject(prefab.name + "Pool");
 			newPool.transform.parent = poolManager.transform;
 			PoolHolder newPoolHolder = newPool.AddComponent<PoolHolder>();
 			newPoolHolder.SetPoolPrefab(prefab);
-			if (startSize > 0) newPoolHolder.Add(startSize);
-			poolHolders.Add(prefabID, newPoolHolder);
+			if (startSize > 0) newPoolHolder.awakeSize = startSize;
 
 			return newPoolHolder;
 		}

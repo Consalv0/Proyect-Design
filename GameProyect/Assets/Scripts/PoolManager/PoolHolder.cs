@@ -6,7 +6,12 @@ public class PoolHolder : MonoBehaviour {
 	/// <summary>
 	/// The pool identifier.
 	/// </summary>
-	[ReadOnly][SerializeField] int poolID;
+
+#if UNITY_EDITOR
+	[ReadOnly]
+#endif
+	[SerializeField]
+	int poolID;
 	public int prefabID {
 		get {
 			return poolID;
@@ -52,10 +57,11 @@ public class PoolHolder : MonoBehaviour {
 	/// </summary>
 	[SerializeField] Queue<GameObject> objectsInPool;
 
-	void Awake() {
+	void Start() {
 		if (poolPrefab == null) {
 			throw new System.NullReferenceException("Pool prefab is missing or null");
 		} else {
+			Debug.Log("Iniciado", this.gameObject);
 			poolID = poolPrefab.GetInstanceID();
 			objectsInPool = new Queue<GameObject>();
 			if (PoolManager.AddExistingPoolHolder(this).GetInstanceID() == GetInstanceID()) {
@@ -99,7 +105,7 @@ public class PoolHolder : MonoBehaviour {
 		value = value > 0 ? value : 1;
 		for (int i = 0; i < value; i++) {
 			GameObject poolObject = Instantiate(poolPrefab);
-			poolObject.name = poolObject.GetInstanceID() + "@" + name;
+			poolObject.name = poolObject.GetInstanceID() + "@" + parenting.name;
 			if (poolObject.GetComponent<PoolObject>() == null) {
 				poolObject.AddComponent<PoolObject>().SetPoolHolder(this);
 			} else {
