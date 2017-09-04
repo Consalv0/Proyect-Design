@@ -22,41 +22,44 @@ public class GridMap : MonoBehaviour, IGLDraw, IUserInteraction {
 		}
 	}
 
+	float x, y, z;
 	Dictionary<Vector2, GameObject> objectsIn = new Dictionary<Vector2, GameObject>();
 
-	void Awake() {
-		
-	}
-
-	public bool TryPlaceObject(ref GridObject gridObject, Vector3 worldPosition) {
-		GameObject obj = gridObject.gameObject;
-		return TryPLaceObject(ref obj, worldPosition, gridObject.cells, gridObject.basePosition);
-	}
-	public bool TryPlaceObject(ref GameObject obj, Vector3 worldPosition, Vector2[] objectCells) {
-		Vector3 basePosition = UtilityBox.GetLowerVertex(obj.transform, obj.GetComponent<MeshFilter>().sharedMesh);
-		if (obj.GetComponent<MeshRenderer>()) {
-			basePosition -= (obj.transform.position.y - obj.GetComponent<MeshRenderer>().bounds.center.y) * Vector3.up;
+	public void ForcePlaceObject(GridObject gridObject, Vector3 worldPosition, bool addToGrid, bool moveOnPLace) {
+		Vector2 cellPos = WorldPointToCell(worldPosition);
+		List<Vector2> objGridCells = new List<Vector2>();
+		for (int i = 0; i < gridObject.cells.Count; i++) {
+			if (objectsIn.ContainsKey(gridObject.cells[i] + cellPos)) {
+				continue;
+			}
+			objGridCells.Add(gridObject.cells[i] + cellPos);
 		}
-		Vector2 medianPoint = UtilityBox.GetMendianPoint(objectCells);
-		basePosition.x = medianPoint.x;
-		basePosition.z = medianPoint.y;
-		return TryPLaceObject(ref obj, worldPosition, objectCells, basePosition);
+		if (addToGrid) {
+			foreach (var cell in objGridCells) {
+				objectsIn.Add(cell, gridObject.gameObject);
+			}
+		}
+		if (moveOnPLace) {
+			gridObject.transform.position = WorldPointToWorldCellPoint(worldPosition) - gridObject.basePosition;
+		}
 	}
-	public bool TryPLaceObject(ref GameObject obj, Vector3 worldPosition, Vector2[] objectCells, Vector3 basePosition) {
-		Vector2 cellPos = WorldPointToCellPos(worldPosition);
-		Vector2[] objGridCells = new Vector2[objectCells.Length];
-		for (int i = 0; i < objectCells.Length; i++) {
-			objGridCells[i] = objectCells[i] + cellPos;
+	public bool TryPlaceObject(GridObject gridObject, Vector3 worldPosition, bool addToGrid, bool moveOnPLace) {
+		Vector2 cellPos = WorldPointToCell(worldPosition);
+		Vector2[] objGridCells = new Vector2[gridObject.cells.Count];
+		for (int i = 0; i < gridObject.cells.Count; i++) {
+			objGridCells[i] = gridObject.cells[i] + cellPos;
 			if (objectsIn.ContainsKey(objGridCells[i])) {
 				return false;
 			}
 		}
+		if (addToGrid) {
 		foreach (var cell in objGridCells) {
-			objectsIn.Add(cell, obj);
+			objectsIn.Add(cell, gridObject.gameObject);
+			}
 		}
-		Vector3 cellWorldPos = WorldPointToWorldCellPoint(worldPosition);
-
-		obj.transform.position = new Vector3(basePosition.x * cellSize, basePosition.y, basePosition.z * cellSize) + cellWorldPos;
+		if (moveOnPLace) {
+			gridObject.transform.position = WorldPointToWorldCellPoint(worldPosition) - gridObject.basePosition;
+		}
 		return true;
 	}
 
@@ -68,19 +71,25 @@ public class GridMap : MonoBehaviour, IGLDraw, IUserInteraction {
 		}
 	}
 
+	public Vector3 CellToWorldPoint(Vector2 cell) {
+		x = cell.x + transform.position.x / cellSize;
+		z = cell.y + transform.position.z / cellSize;
+		x = Mathf.Ceil(x) * cellSize;
+		z = Mathf.Ceil(z) * cellSize;
+		return new Vector3(x, transform.position.y, z);
+	}
 	public Vector3 WorldPointToWorldCellPoint(Vector3 position) {
-		Vector3 pos = WorldPointToCellPos(position) * cellSize;
-		pos = new Vector3(pos.x, 0, pos.y);
-		// pos += transform.position;
+		Vector3 pos = WorldPointToCell(position) * cellSize;
+		pos = new Vector3(pos.x, transform.position.y, pos.y);
 		return pos;
 	}
-	public Vector2 WorldPointToCellPos(Vector3 position) {
-		float xAxis = position.x - cellSize / 2;
-		float yAxis = position.z - cellSize / 2;
-		xAxis = Mathf.Ceil(xAxis / cellSize);
-		yAxis = Mathf.Ceil(yAxis / cellSize);
+	public Vector2 WorldPointToCell(Vector3 position) {
+		x = position.x - cellSize / 2;
+		y = position.z - cellSize / 2;
+		x = Mathf.Ceil(x / cellSize);
+		y = Mathf.Ceil(y / cellSize);
 		
-		return new Vector2(xAxis, yAxis);
+		return new Vector2(x, y);
 	}
 
 	public void Interact(Vector3 position, params GameObject[] objectToPlace) {
@@ -88,14 +97,14 @@ public class GridMap : MonoBehaviour, IGLDraw, IUserInteraction {
 			return;
 		}
 		GridObject gridObject = objectToPlace[0].GetComponent<GridObject>();
-		TryPlaceObject(ref gridObject, position);
+		TryPlaceObject(gridObject, position, true, true);
 	}
 
 	void OnDrawGizmos() {
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit)) {
-			Vector2 cellPos = WorldPointToCellPos(hit.point);
+			Vector2 cellPos = WorldPointToCell(hit.point);
 			if (GetGameObjectByCellPos(cellPos)) {
 				Gizmos.color = Color.red;
 			} else {
@@ -107,7 +116,6 @@ public class GridMap : MonoBehaviour, IGLDraw, IUserInteraction {
 		GLDraw();
 	}
 
-	float x, y, z;
 	public void GLDraw() {
 		if (!mat) {
 			var shader = Shader.Find("Sprites/Default");
