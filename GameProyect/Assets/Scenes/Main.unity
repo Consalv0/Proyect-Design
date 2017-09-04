@@ -186,7 +186,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 207816916}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.5, y: 1, z: -6.5}
+  m_LocalPosition: {x: -6.28, y: 1, z: -7.66}
   m_LocalScale: {x: 2, y: 1, z: 2}
   m_Children: []
   m_Father: {fileID: 0}
@@ -204,14 +204,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridMap: {fileID: 289539729}
-  cellPosition: {x: -4, y: -6}
+  cellPosition: {x: -3, y: 1}
   placeOnAwake: 1
+  moveOnPlace: 1
   cells:
+  - {x: 0, y: 0}
   - {x: 0, y: 1}
   - {x: 1, y: 1}
-  - {x: 0, y: 0}
   - {x: 1, y: 0}
-  basePosition: {x: 0.5, y: -1, z: 0.5}
+  basePosition: {x: -0.5, y: -1, z: -0.5}
 --- !u!1 &289539724
 GameObject:
   m_ObjectHideFlags: 0
@@ -546,11 +547,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridMap: {fileID: 289539729}
-  cellPosition: {x: -0, y: -0}
+  cellPosition: {x: 1, y: -4}
   placeOnAwake: 1
+  moveOnPlace: 1
   cells:
   - {x: 0, y: 0}
-  basePosition: {x: 0, y: -1, z: 0}
+  - {x: 1, y: 0}
+  - {x: 1, y: 1}
+  - {x: 0, y: 1}
+  basePosition: {x: -0.5, y: -1, z: -0.5}
 --- !u!23 &1516747539
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -610,7 +615,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1516747537}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: 1, z: -5}
+  m_LocalPosition: {x: 0.61, y: 1, z: -7.45}
   m_LocalScale: {x: 2, y: 1, z: 2}
   m_Children: []
   m_Father: {fileID: 0}

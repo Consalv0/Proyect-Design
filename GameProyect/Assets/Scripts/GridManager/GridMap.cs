@@ -25,8 +25,9 @@ public class GridMap : MonoBehaviour, IGLDraw, IUserInteraction {
 	float x, y, z;
 	Dictionary<Vector2, GameObject> objectsIn = new Dictionary<Vector2, GameObject>();
 
-	public void ForcePlaceObject(GridObject gridObject, Vector3 worldPosition, bool addToGrid, bool moveOnPLace) {
+	public void ForcePlaceObject(GridObject gridObject, Vector3 worldPosition, bool addToGrid, bool moveOnPlace) {
 		Vector2 cellPos = WorldPointToCell(worldPosition);
+		gridObject.cellPosition = cellPos;
 		List<Vector2> objGridCells = new List<Vector2>();
 		for (int i = 0; i < gridObject.cells.Count; i++) {
 			if (objectsIn.ContainsKey(gridObject.cells[i] + cellPos)) {
@@ -39,12 +40,13 @@ public class GridMap : MonoBehaviour, IGLDraw, IUserInteraction {
 				objectsIn.Add(cell, gridObject.gameObject);
 			}
 		}
-		if (moveOnPLace) {
+		if (moveOnPlace) {
 			gridObject.transform.position = WorldPointToWorldCellPoint(worldPosition) - gridObject.basePosition;
 		}
 	}
-	public bool TryPlaceObject(GridObject gridObject, Vector3 worldPosition, bool addToGrid, bool moveOnPLace) {
+	public bool TryPlaceObject(GridObject gridObject, Vector3 worldPosition, bool addToGrid, bool moveOnPlace) {
 		Vector2 cellPos = WorldPointToCell(worldPosition);
+		gridObject.cellPosition = cellPos;
 		Vector2[] objGridCells = new Vector2[gridObject.cells.Count];
 		for (int i = 0; i < gridObject.cells.Count; i++) {
 			objGridCells[i] = gridObject.cells[i] + cellPos;
@@ -57,7 +59,7 @@ public class GridMap : MonoBehaviour, IGLDraw, IUserInteraction {
 			objectsIn.Add(cell, gridObject.gameObject);
 			}
 		}
-		if (moveOnPLace) {
+		if (moveOnPlace) {
 			gridObject.transform.position = WorldPointToWorldCellPoint(worldPosition) - gridObject.basePosition;
 		}
 		return true;

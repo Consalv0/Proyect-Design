@@ -12,9 +12,9 @@ public class GridObject : MonoBehaviour {
 	[ReadOnly]
 	public Vector2 cellPosition;
 	[HideInInspector][SerializeField]
-	bool placeOnAwake;
+	bool placeOnAwake = true;
 	[HideInInspector]
-	public bool moveOnPlace;
+	public bool moveOnPlace = true;
 	[HideInInspector]
 	public List<Vector2> cells = new List<Vector2>(1);
 	[HideInInspector]
