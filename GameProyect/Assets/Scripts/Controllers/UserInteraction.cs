@@ -3,13 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum Towers {
+	Coconut,
+	Spears,
+	FireSpears
+}
+
 public class UserInteraction : MonoBehaviour {
 	public Camera playerCamera;
 	public string interactionInput = "Fire1";
 	public float interactRadio = 4;
 	public IPickable objectInHand = null;
 
-	public GridObject placeObject;
+	public GridObject selectedGridObject;
+	public GameObject placeObject;
 
 	[SerializeField] Image pointer;
 	[SerializeField] Sprite passivePointer;
@@ -20,6 +27,8 @@ public class UserInteraction : MonoBehaviour {
 #endif
 	[SerializeField]
 	float InteractTimer;
+	Ray ray;
+	RaycastHit hit;
 
 	void Awake() {
 		if (playerCamera == null) {
@@ -28,8 +37,7 @@ public class UserInteraction : MonoBehaviour {
 	}
 
 	void Update() {
-		Ray ray = playerCamera.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hit;
+		ray = playerCamera.ScreenPointToRay(Input.mousePosition);
 		IUserInteraction hitInteraction = Physics.Raycast(ray, out hit, interactRadio) ? hit.transform.GetComponent<IUserInteraction>() : null;
 		bool realizedHit = hitInteraction != null;
 
@@ -61,11 +69,10 @@ public class UserInteraction : MonoBehaviour {
 			}
 		}
 
-		if (Input.GetButton(interactionInput) && objectInHand == null) {
-			InteractTimer += Time.deltaTime;
-		}
-
 		if (Input.GetButtonDown(interactionInput)) {
+			if (selectedGridObject) {
+				placeObject = Instantiate(selectedGridObject.gameObject);
+			}
 			if (objectInHand != null) {
 				InteractTimer = 0;
 				objectInHand.Drop();
@@ -73,13 +80,29 @@ public class UserInteraction : MonoBehaviour {
 			}
 		}
 
+		if (Input.GetButton(interactionInput) && objectInHand == null) {
+			if (realizedHit && hitInteraction.canInteract && placeObject) {
+				hitInteraction.Interact(hit.point, placeObject.gameObject, null);
+			}
+			InteractTimer += Time.deltaTime;
+		}
+
+
 		if (Input.GetButtonUp(interactionInput) && objectInHand == null) {
 			InteractTimer = 0;
 			if (realizedHit && InteractTimer < 0.6f) {
 				if (hitInteraction.canInteract && placeObject) {
 					hitInteraction.Interact(hit.point, placeObject.gameObject);
 				}
+			} else {
+				Destroy(placeObject);
 			}
+		}
+	}
+
+	public void SelectTower(GameObject obj) {
+		if (obj.GetComponent<GridObject>()) {
+			selectedGridObject = obj.GetComponent<GridObject>();
 		}
 	}
 }

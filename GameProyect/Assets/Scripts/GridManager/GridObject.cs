@@ -20,7 +20,14 @@ public class GridObject : MonoBehaviour {
 	[HideInInspector]
 	public Vector3 basePosition;
 
+	[HideInInspector]
+	public Renderer renderer;
+	[HideInInspector]
+	public Material originalMat;
+
 	void Awake() {
+		renderer = GetComponent<Renderer>();
+		originalMat = renderer.material;
 		if (placeOnAwake && gridMap != null) {
 			gridMap.ForcePlaceObject(this, transform.position + basePosition, true, moveOnPlace);
 		}
@@ -39,8 +46,8 @@ public class GridObject : MonoBehaviour {
 		basePosition = UtilityBox.GetLowerVertex(transform, GetComponent<MeshFilter>().sharedMesh);
 		basePosition = basePosition - (transform.position.y - GetComponent<MeshRenderer>().bounds.center.y) * Vector3.up;
 		Vector2 medianPoint = UtilityBox.GetMendianPoint(cells.ToArray());
-		basePosition.x = -medianPoint.x;
-		basePosition.z = -medianPoint.y;
+		basePosition.x = -medianPoint.x * gridMap.cellSize;
+		basePosition.z = -medianPoint.y * gridMap.cellSize;
 	}
 
 	void OnDrawGizmosSelected() {

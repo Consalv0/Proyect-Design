@@ -4,7 +4,10 @@ using UnityEngine;
 using System.Diagnostics;
 
 public class GridMap : MonoBehaviour, IGLDraw, IUserInteraction {
+	public UserInteraction userInteractor;
 	public Material mat;
+	public Material possible;
+	public Material impossible;
 	/// <summary>
 	/// The size of the render.
 	/// </summary>
@@ -51,6 +54,9 @@ public class GridMap : MonoBehaviour, IGLDraw, IUserInteraction {
 		for (int i = 0; i < gridObject.cells.Count; i++) {
 			objGridCells[i] = gridObject.cells[i] + cellPos;
 			if (objectsIn.ContainsKey(objGridCells[i])) {
+				if (moveOnPlace) {
+					gridObject.transform.position = WorldPointToWorldCellPoint(worldPosition) - gridObject.basePosition;
+				}
 				return false;
 			}
 		}
@@ -93,13 +99,23 @@ public class GridMap : MonoBehaviour, IGLDraw, IUserInteraction {
 		
 		return new Vector2(x, y);
 	}
-
+	 
 	public void Interact(Vector3 position, params GameObject[] objectToPlace) {
 		if (objectToPlace.Length == 0 || objectToPlace[0] == null || objectToPlace[0].GetComponent<GridObject>() == null) {
 			return;
 		}
 		GridObject gridObject = objectToPlace[0].GetComponent<GridObject>();
-		TryPlaceObject(gridObject, position, true, true);
+		if (objectToPlace.Length > 1) {
+			var isPossible = TryPlaceObject(gridObject, position + gridObject.basePosition, false, true);
+			gridObject.renderer.material = isPossible ? possible : impossible;
+		} else {
+			gridObject.renderer.material = gridObject.originalMat;
+			if (!TryPlaceObject(gridObject, position + gridObject.basePosition, true, true)) {
+				Destroy(gridObject.gameObject);
+			}
+			userInteractor.selectedGridObject = null;
+			userInteractor.placeObject = null;
+		}
 	}
 
 	void OnDrawGizmos() {
