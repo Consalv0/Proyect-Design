@@ -1,16 +1,20 @@
 fileFormatVersion: 2
-guid: f435fd14a8a3b0545b3bac23e9de6500
-timeCreated: 1505620602
+guid: d3637ae14a342424aa3a52531a9451b0
+timeCreated: 1505627211
 licenseType: Free
 ModelImporter:
   serializedVersion: 21
   fileIDToRecycleName:
     100000: //RootNode
+    100002: Sphere
     400000: //RootNode
+    400002: Sphere
     2300000: //RootNode
+    2300002: Sphere
     3300000: //RootNode
-    4300000: SpearsTiki
-    6400000: //RootNode
+    3300002: Sphere
+    4300000: Sphere
+    6400000: Sphere
     7400000: Default Take
     9500000: //RootNode
   materials:
@@ -48,7 +52,7 @@ ModelImporter:
     importCameras: 0
     importLights: 0
     swapUVChannels: 0
-    generateSecondaryUV: 1
+    generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
     keepQuads: 0
@@ -79,7 +83,7 @@ ModelImporter:
     rootMotionBoneName: 
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 0

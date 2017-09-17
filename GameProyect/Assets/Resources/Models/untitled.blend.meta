@@ -1,15 +1,31 @@
 fileFormatVersion: 2
-guid: f435fd14a8a3b0545b3bac23e9de6500
-timeCreated: 1505620602
+guid: a15f6ca9bbf60ae4993d7b655c6001c8
+timeCreated: 1505627216
 licenseType: Free
 ModelImporter:
   serializedVersion: 21
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
+    100000: Armature
+    100002: Brazo_d
+    100004: brazo_i
+    100006: cabeza
+    100008: cuerpo
+    100010: cuerpo_001
+    100012: mano_d
+    100014: mano_ki
+    100016: //RootNode
+    400000: Armature
+    400002: Brazo_d
+    400004: brazo_i
+    400006: cabeza
+    400008: cuerpo
+    400010: cuerpo_001
+    400012: mano_d
+    400014: mano_ki
+    400016: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: SpearsTiki
+    4300000: Cube
     6400000: //RootNode
     7400000: Default Take
     9500000: //RootNode

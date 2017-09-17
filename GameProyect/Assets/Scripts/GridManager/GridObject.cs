@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditorInternal;
+using System;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 [RequireComponent(typeof(MeshRenderer))]
-public class GridObject : MonoBehaviour {
+public class GridObject : MonoBehaviour, IUserInteraction {
 	public GridMap gridMap;
 	[ReadOnly]
 	public Vector2 cellPosition;
@@ -24,6 +25,13 @@ public class GridObject : MonoBehaviour {
 	public Renderer renderer;
 	[HideInInspector]
 	public Material originalMat;
+	public bool userInteraction;
+
+	public bool canInteract {
+		get {
+			return userInteraction;
+		}
+	}
 
 	void Awake() {
 		renderer = GetComponent<Renderer>();
@@ -40,6 +48,10 @@ public class GridObject : MonoBehaviour {
 		gridMap = grid;
 		cellPosition = grid.WorldPointToCell(transform.position + basePosition);
 		return true;
+	}
+
+	public void RemoveObjectInGrid() {
+		gridMap.RemoveObject(this);
 	}
 
 	public void CalculateBase() {
@@ -59,6 +71,14 @@ public class GridObject : MonoBehaviour {
 				Gizmos.DrawCube(new Vector3(cell.x, 0, cell.y) * gridMap.cellSize + basePosition + transform.position,
 				                new Vector3(gridMap.cellSize, 0.1f, gridMap.cellSize));
 			}
+		}
+	}
+
+	public void Interact(Vector3 interactPosition, params GameObject[] objects) {
+		// TODO hacer que se inciede
+		if (objects[0].CompareTag("Enemy")) {
+			gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+			RemoveObjectInGrid();
 		}
 	}
 }

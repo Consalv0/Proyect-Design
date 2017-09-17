@@ -72,6 +72,8 @@ public class UserInteraction : MonoBehaviour {
 		if (Input.GetButtonDown(interactionInput)) {
 			if (selectedGridObject) {
 				placeObject = Instantiate(selectedGridObject.gameObject);
+			} else if (realizedHit && hitInteraction.canInteract && hitInteraction.gameObject.GetComponent<GridObject>()) {
+				hitInteraction.Interact(hit.point, gameObject);
 			}
 			if (objectInHand != null) {
 				InteractTimer = 0;

@@ -61,14 +61,28 @@ public class GridMap : MonoBehaviour, IGLDraw, IUserInteraction {
 			}
 		}
 		if (addToGrid) {
-		foreach (var cell in objGridCells) {
-			objectsIn.Add(cell, gridObject.gameObject);
+			foreach (var cell in objGridCells) {
+				objectsIn.Add(cell, gridObject.gameObject);
 			}
+			gridObject.gridMap = this;
+			gridObject.gameObject.layer = LayerMask.NameToLayer("Default");
 		}
 		if (moveOnPlace) {
 			gridObject.transform.position = WorldPointToWorldCellPoint(worldPosition) - gridObject.basePosition;
 		}
 		return true;
+	}
+	public void RemoveObject(GridObject gridObject) {
+		List<KeyValuePair<Vector2, GameObject>> valuesToRemove = new List<KeyValuePair<Vector2, GameObject>>();
+		foreach (var vect in objectsIn) {
+			if (ReferenceEquals(vect.Value, gridObject.gameObject)) {
+				valuesToRemove.Add(vect);
+			}
+		}
+
+		for (int i = 0; i < valuesToRemove.Count; i++) {
+			objectsIn.Remove(valuesToRemove[i].Key);
+		}
 	}
 
 	public GameObject GetGameObjectByCellPos(Vector2 position) {
