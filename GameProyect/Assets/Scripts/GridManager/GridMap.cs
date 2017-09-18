@@ -119,15 +119,16 @@ public class GridMap : MonoBehaviour, IGLDraw, IUserInteraction {
 			return;
 		}
 		GridObject gridObject = objectToPlace[0].GetComponent<GridObject>();
-		if (objectToPlace.Length > 1) {
+		if (objectToPlace.Length > 1) { // Mouse holding
 			var isPossible = TryPlaceObject(gridObject, position + gridObject.basePosition, false, true);
 			gridObject.renderer.material = isPossible ? possible : impossible;
-		} else {
+		} else { // Mouse released
 			gridObject.renderer.material = gridObject.originalMat;
 			if (!TryPlaceObject(gridObject, position + gridObject.basePosition, true, true)) {
 				Destroy(gridObject.gameObject);
+			} else {
+				userInteractor.selectedGridObject = null;
 			}
-			userInteractor.selectedGridObject = null;
 			userInteractor.placeObject = null;
 		}
 	}
@@ -161,7 +162,6 @@ public class GridMap : MonoBehaviour, IGLDraw, IUserInteraction {
 		int renderSizeM = Mathf.Abs(renderSize);
 		renderSizeM += renderSizeM % 2 == 1 ? 0 : 1;
 
-		float gridSize = renderSizeM * cellSize;
 		float halfGridSize = renderSizeM * 0.5f;
 		float halfCellSize = cellSize * 0.5f;
 

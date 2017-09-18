@@ -75,7 +75,7 @@ public class GridObject : MonoBehaviour, IUserInteraction {
 	}
 
 	public void Interact(Vector3 interactPosition, params GameObject[] objects) {
-		// TODO hacer que se inciede
+		// TODO hacer que se incieda
 		if (objects[0].CompareTag("Enemy")) {
 			gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
 			RemoveObjectInGrid();

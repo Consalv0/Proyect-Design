@@ -71,7 +71,7 @@ public class UserInteraction : MonoBehaviour {
 
 		if (Input.GetButtonDown(interactionInput)) {
 			if (selectedGridObject) {
-				placeObject = Instantiate(selectedGridObject.gameObject);
+				placeObject = placeObject == null ? Instantiate(selectedGridObject.gameObject) : placeObject;
 			} else if (realizedHit && hitInteraction.canInteract && hitInteraction.gameObject.GetComponent<GridObject>()) {
 				hitInteraction.Interact(hit.point, gameObject);
 			}
@@ -93,6 +93,9 @@ public class UserInteraction : MonoBehaviour {
 		if (Input.GetButtonUp(interactionInput) && objectInHand == null) {
 			InteractTimer = 0;
 			if (realizedHit && InteractTimer < 0.6f) {
+				if (hitInteraction.gameObject.GetComponent<ITrigger>() != null) {
+					hitInteraction.gameObject.GetComponent<ITrigger>().delegates[0].Invoke();
+				}
 				if (hitInteraction.canInteract && placeObject) {
 					hitInteraction.Interact(hit.point, placeObject.gameObject);
 				}
